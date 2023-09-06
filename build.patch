@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4db70f1..5e45c8f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -210,4 +210,12 @@ if (BUILD_SHARED_LIBS)
+ else()
+     add_subdirectory(examples)
+     add_subdirectory(models)
+-endif()
+\ No newline at end of file
++endif()
++
++set_target_properties(bert PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/bert.h)
++
++install(TARGETS bert
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib/static
++    PUBLIC_HEADER DESTINATION include/
++)
