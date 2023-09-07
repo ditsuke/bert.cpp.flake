@@ -1,11 +1,20 @@
+diff --git a/models/__init__.py b/models/__init__.py
+new file mode 100644
+index 0000000..e69de29
 diff --git a/models/convert-to-ggml.py b/models/convert-to-ggml.py
-index 7ef5b80..e911f7a 100644
+deleted file mode 100644
+index 7ef5b80..0000000
 --- a/models/convert-to-ggml.py
-+++ b/models/convert-to-ggml.py
-@@ -6,97 +6,102 @@ import numpy as np
- 
- from transformers import AutoModel, AutoTokenizer
- 
++++ /dev/null
+@@ -1,102 +0,0 @@
+-import sys
+-import struct
+-import json
+-import torch
+-import numpy as np
+-
+-from transformers import AutoModel, AutoTokenizer
+-
 -if len(sys.argv) < 3:
 -    print("Usage: convert-h5-to-ggml.py dir-model [use-f32]\n")
 -    print("  ftype == 0 -> float32")
@@ -62,7 +71,7 @@ index 7ef5b80..e911f7a 100644
 -fout.write(struct.pack("i", hparams["num_attention_heads"]))
 -fout.write(struct.pack("i", hparams["num_hidden_layers"]))
 -fout.write(struct.pack("i", ftype))
- 
+-
 -for i in range(hparams["vocab_size"]):
 -    text = vocab[i][:-1] # strips newline at the end
 -    #print(f"{i}:{text}")
@@ -97,15 +106,31 @@ index 7ef5b80..e911f7a 100644
 -    data.tofile(fout)
 -
 -fout.close()
+-
+-print("Done. Output file: " + fname_out)
+-print("")
+diff --git a/models/convert_to_ggml.py b/models/convert_to_ggml.py
+new file mode 100644
+index 0000000..e911f7a
+--- /dev/null
++++ b/models/convert_to_ggml.py
+@@ -0,0 +1,107 @@
++import sys
++import struct
++import json
++import torch
++import numpy as np
++
++from transformers import AutoModel, AutoTokenizer
++
++
 +def main():
 +    if len(sys.argv) < 3:
 +        print("Usage: convert-h5-to-ggml.py dir-model [use-f32]\n")
 +        print("  ftype == 0 -> float32")
 +        print("  ftype == 1 -> float16")
 +        sys.exit(1)
- 
--print("Done. Output file: " + fname_out)
--print("")
++
 +    # output in the same directory as the model
 +    dir_model = sys.argv[1]
 +    fname_out = sys.argv[1] + "/ggml-model.bin"
@@ -197,10 +222,13 @@ index 7ef5b80..e911f7a 100644
 +
 +if __name__ == "__main__":
 +    main()
-diff --git a/models/download-ggml.py b/models/download-ggml.py
+diff --git a/models/download-ggml.py b/models/download_ggml.py
+similarity index 98%
+rename from models/download-ggml.py
+rename to models/download_ggml.py
 index c7664ad..e705cfe 100644
 --- a/models/download-ggml.py
-+++ b/models/download-ggml.py
++++ b/models/download_ggml.py
 @@ -16,7 +16,7 @@ def download_model(args):
      hh.hf_hub_download(repo_id=MODELS_REPO, filename=f'{model_name}/{filename}', repo_type='model', revision='main', local_dir='.', local_dir_use_symlinks=False)
      print(f'{filename} downloaded successfully')
@@ -219,19 +247,25 @@ index c7664ad..e705cfe 100644
 +if __name__ == '__main__':
 +    main()
 diff --git a/models/upload-to-hf.py b/models/upload-to-hf.py
-index c16fba8..5c35e4c 100644
+deleted file mode 100644
+index c16fba8..0000000
 --- a/models/upload-to-hf.py
-+++ b/models/upload-to-hf.py
-@@ -8,16 +8,20 @@ import sys
- os.chdir(os.path.dirname(__file__))
- api = HfApi()
- 
++++ /dev/null
+@@ -1,23 +0,0 @@
+-
+-from transformers import LlamaConfig, LlamaForCausalLM, LlamaTokenizer, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+-
+-from huggingface_hub import HfApi
+-import os
+-import sys
+-
+-os.chdir(os.path.dirname(__file__))
+-api = HfApi()
+-
 -if len(sys.argv) > 1:
 -    model = sys.argv[1].strip('/')
 -    sizes = ['f32', 'f16', 'q4_0', 'q4_1']
-+if __name__ == "__main__":
-+    main()
- 
+-
 -    for s in sizes:
 -        api.upload_file(
 -            path_or_fileobj=f"./{model}/ggml-model-{s}.bin",
@@ -242,6 +276,25 @@ index c16fba8..5c35e4c 100644
 -else:
 -    print("give model name")
 \ No newline at end of file
+diff --git a/models/upload_to_hf.py b/models/upload_to_hf.py
+new file mode 100644
+index 0000000..5c35e4c
+--- /dev/null
++++ b/models/upload_to_hf.py
+@@ -0,0 +1,27 @@
++
++from transformers import LlamaConfig, LlamaForCausalLM, LlamaTokenizer, Trainer, TrainingArguments, DataCollatorForLanguageModeling
++
++from huggingface_hub import HfApi
++import os
++import sys
++
++os.chdir(os.path.dirname(__file__))
++api = HfApi()
++
++if __name__ == "__main__":
++    main()
++
 +def main():
 +    if len(sys.argv) > 1:
 +        model = sys.argv[1].strip('/')

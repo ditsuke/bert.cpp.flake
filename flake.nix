@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/23.05";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix = {
       url = "github:nix-community/poetry2nix";
@@ -31,7 +31,7 @@
         cmakeFlags = [
           "-DBUILD_SHARED_LIBS=ON"
         ];
-        hardeningDisable = [ "all" ];
+        hardeningDisable = [ "format" ];
         postInstall = ''
         '';
       in
@@ -43,7 +43,9 @@
           };
 
         packages.scripts = poetry2nix.legacyPackages.${system}.mkPoetryApplication {
+          python = pkgs.python311;
           projectDir = pkgs.applyPatches { inherit src patches; };
+          preferWheels = true;
         }
         ;
       }
