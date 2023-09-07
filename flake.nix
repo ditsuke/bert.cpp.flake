@@ -22,6 +22,7 @@
         patches = with pkgs ; [
           ./build.patch
           ./package.patch
+          ./path-sanitize.patch
         ];
         buildInputs = with pkgs ; [ ];
         nativeBuildInputs = with pkgs; [

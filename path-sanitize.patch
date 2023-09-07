@@ -1,0 +1,31 @@
+diff --git a/models/download_ggml.py b/models/download_ggml.py
+index e705cfe..a1737cb 100644
+--- a/models/download_ggml.py
++++ b/models/download_ggml.py
+@@ -1,4 +1,5 @@
+ import argparse
++from pathlib import Path
+ import huggingface_hub as hh
+ import os
+ 
+@@ -13,7 +14,10 @@ def download_model(args):
+     model_name = args.model_name
+     size = args.size    
+     filename = f'ggml-model-{size}.bin'
+-    hh.hf_hub_download(repo_id=MODELS_REPO, filename=f'{model_name}/{filename}', repo_type='model', revision='main', local_dir='.', local_dir_use_symlinks=False)
++    print(f'Downloading {filename}...')
++    output_dir = Path(args.output_dir)
++    hh.hf_hub_download(repo_id=MODELS_REPO, filename=f'{model_name}/{filename}', repo_type='model', revision='main',
++                       local_dir=output_dir, local_dir_use_symlinks=False)
+     print(f'{filename} downloaded successfully')
+ 
+ def main():
+@@ -31,6 +35,8 @@ def main():
+     download_parser.add_argument('size', choices=['f32', 'f16', 'q4_0', 'q4_1'], help='Size of the model')
+     download_parser.set_defaults(func=download_model)
+ 
++    download_parser.add_argument('--output_dir', default='.', help='Output directory')
++
+     args = parser.parse_args()
+     args.func(args)
+ 
